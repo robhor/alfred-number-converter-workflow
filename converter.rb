@@ -58,18 +58,18 @@ begin
 	query = "0" + query if query.start_with? "b"
 	i = Integer(query)
 
+	return if i < 0
+
 	items << Item.new("bin", i.to_s(2), i.to_s(2), "Binary")
 	items << Item.new("oct", "0"+i.to_s(8), "0"+i.to_s(8), "Octagonal")
 	items << Item.new("dec", i, i, "Decimal")
 	items << Item.new("hex", "0x"+i.to_s(16), "0x"+i.to_s(16), "Hexadecimal")
-	if i > 0
-		if i < 32
-			items << Item.new("chr", ascii[i], ascii[i], "ASCII")
-		elsif i < 128
-			items << Item.new("chr", i.chr('UTF-8'), i.chr('UTF-8'), "ASCII")
-		elsif i < 256
-			items << Item.new("chr", i.chr('UTF-8'), i.chr('UTF-8'), "ASCII (extended)")
-		end
+	if i < 32
+		items << Item.new("chr", ascii[i], ascii[i], "ASCII")
+	elsif i < 128
+		items << Item.new("chr", i.chr('UTF-8'), i.chr('UTF-8'), "ASCII")
+	elsif i < 256
+		items << Item.new("chr", i.chr('UTF-8'), i.chr('UTF-8'), "ASCII (extended)")
 	end
 rescue
 	items << Item.new("error", query, "Could not convert number", "Invalid format")
